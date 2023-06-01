@@ -1,0 +1,55 @@
+
+
+class Solution
+{
+    //Function to find largest rectangular area possible in a given histogram.
+    public static long getMaxArea(long hist[], long n) 
+    {
+        // your code here
+        //NSR 
+        Stack<Long> st = new Stack<>();
+        st.push(n-1);
+        long[] rb = new long[(int)n];
+        rb[(int)n-1] = n;
+        for(int i=(int)n-2;i>=0;i--){
+            while(st.size()>0 && hist[i]<=hist[st.peek().intValue()]){
+                st.pop();
+            }
+            if(st.size()>0){
+                rb[i] = st.peek();
+            }else{
+                rb[i] = n;
+            }
+            st.push((long)i);
+        }
+        //NSL
+        st = new Stack<>();
+        st.push((long)0);
+        long[] lb = new long[(int)n];
+        lb[0]= -1;
+        for(int i=1;i<n;i++){
+            while(st.size()>0 && hist[i]<=hist[st.peek().intValue()]){
+                st.pop();
+            }
+            if(st.size()>0){
+                lb[i] = st.peek();
+            }else{
+                lb[i] = -1;
+            }
+            st.push((long)i);
+        }
+        
+        long maxarea = 0;
+        for(int i=0;i<n;i++){
+            //System.out.print(lb[i] + " ");
+            long width = rb[i]-lb[i]-1;
+            long area = width*hist[i];
+            if(area>maxarea){
+                maxarea = area;
+            }
+        }
+        return maxarea;
+    }
+        
+}
+
